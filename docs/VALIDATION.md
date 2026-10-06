@@ -58,3 +58,7 @@ portable entrypoint and verified actual engine configs for target and draft:
 YaRN 2x, 524288 context, MTP3, eight slots, 8192 batched tokens, 13 GB FP8 and
 both aliases. It did not load model tensors or bind the API port. The existing
 operational container was not restarted or modified during publication.
+The published `service.sh verify` wrapper was also run against that existing
+healthy service: all 13 adversarial probes, API checks, eight concurrent
+streams and mixed structured streams passed. This verifies the public check
+entrypoint, not a fresh full-model boot of the portable Compose deployment.

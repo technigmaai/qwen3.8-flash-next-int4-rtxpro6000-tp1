@@ -34,6 +34,7 @@
     "python_and_shell_syntax": "passed",
     "compose_model_mounts_draft_template_and_image_checks": "passed",
     "configuration_only_container": "passed; both target/draft YaRN, 512k, MTP3, slots8, batch8192, 13GB FP8 and aliases",
+    "published_verify_wrapper_on_existing_service": "passed; all 13 adversarial probes, API checks, eight concurrent streams and mixed structured streams",
     "loaded_model_weights_or_bound_api_port": false,
     "live_service_modified_during_publication": false
   },

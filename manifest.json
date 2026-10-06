@@ -19,7 +19,7 @@
     "compose.yaml": "4fe257e2acb6ed177e682735283a0bb957850bd8a28ad224f991bfd7bf4cce6b",
     "docs/DEPLOYMENT.md": "52536cd89f52836ef1098c9f4a3f6087f0898955208beef342ae9d5d1a9e0f9d",
     "docs/REBUILD.md": "6e01b61bc23f16e1389fde41b02f4e1a9f3e74f004be715d61cd471e2e8055a8",
-    "docs/VALIDATION.md": "97a0702c8e9e5545f94c4e88f30d5233bc79477af8a92ecb4a7740afd5e319ba",
+    "docs/VALIDATION.md": "8b87e7501c3dbe5e721e135ae7152be24d7587f262d967afc45fc1a8f4eb1081",
     "entrypoint.sh": "3809a99aeb2baeeb432420400fd232ff9668761e3dcea7095e06cf76c4fd5c1b",
     "image/Dockerfile.fixes": "77fc6e1261bc410bbb5d796d63f3fb3ccadc89be5a56ff2958e408bf8e7986f6",
     "image/Dockerfile.rtx": "dbc26b56d7747d1c9fe5d36e94db7b72c333670cd1b37cb9717593dfeae82a52",
@@ -51,7 +51,7 @@
     "third_party/saren/src/patch_step_profile.py": "f898231ae3834f821ca494cdcdf7911281aeb9485f2f7f2616ad7a2743f6a560",
     "third_party/saren/src/vllm_fp8_hybrid.py": "d272b63ff72402a0ade73256363269fa493ee4cd8c1ed577fc05c02a4f87b569",
     "third_party/saren/src/vllm_ple_mmap.py": "6ffc537effd05ec6515bd8578c28d292cb376d7eb4a87697466206dfd57748b5",
-    "validation-summary.json": "81959e0c0c1890d00e3af6759b38ca5012b4de8e3e3954a8c82db60a5e5e3e2a",
+    "validation-summary.json": "6dc2b9526f0751c9104ff65e8f2f108c9898f65b71113cfb08ebd4fb5f08f256",
     "verify.py": "8001f6f58c7aa0086d5e0d858d8b33e1bd9851d89e3704b5eb2bf3e1ceae3c21"
   }
 }
