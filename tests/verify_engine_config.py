@@ -27,6 +27,7 @@ assert engine.scheduler_config.max_num_seqs == 8
 assert engine.scheduler_config.max_num_batched_tokens == 8192
 assert engine.cache_config.cache_dtype == 'fp8_e4m3'
 assert engine.cache_config.kv_cache_memory_bytes == 13000000000
+assert engine.attention_config.resolve_indexer_kv_dtype('bf16') == os.environ.get('INDEXER_KV_DTYPE', 'bf16')
 assert engine.speculative_config.num_speculative_tokens == 3
 assert args.served_model_name == ['azampatti/Qwen3.8-Flash-Next-125B-A5B-INT4-AutoRound','rtx']
 for name,config in [('target',engine.model_config),('draft',engine.speculative_config.draft_model_config)]:

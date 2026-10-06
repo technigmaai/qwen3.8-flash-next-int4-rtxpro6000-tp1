@@ -7,6 +7,13 @@ RTX PRO 6000 Blackwell 96 GB GPU with vLLM, MTP3 and an OpenAI-compatible API.
 · [Full setup guide](docs/DEPLOYMENT.md)
 · [Validation summary](validation-summary.json)
 · [Rebuild guide](docs/REBUILD.md)
+· [Versioning](docs/VERSIONING.md)
+
+An isolated FP8 QSA indexer candidate has passed functional checks as
+`v1.0.1-rc.1-sm120-amd64-cu130`, but is **not promoted to stable** because
+post-prefill GPU headroom needs investigation. Stable `v1.0.0` remains unchanged.
+See [candidate results](docs/FP8-INDEXER-RC1.md) and [versioning](docs/VERSIONING.md). Select
+`INDEXER_KV_DTYPE=fp8` only with a patched image; the default remains BF16.
 
 Derived from Saren-Arterius's pinned Qwen3.8 serving stack and azampatti's
 classic AutoRound recipe. This RTX adaptation compiles deterministic QSA for

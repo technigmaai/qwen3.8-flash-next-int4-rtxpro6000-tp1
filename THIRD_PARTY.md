@@ -34,3 +34,11 @@ this source package or runtime image. Their terms remain separate; consult
 [the selected model](https://huggingface.co/azampatti/Qwen3.8-Flash-Next-125B-A5B-INT4-AutoRound)
 and its original sources. No private host cache, credentials or user prompts
 are part of the published package.
+# FP8 QSA indexer candidate
+
+The optional `image/fp8-indexer.patch` adapts vLLM PR #54890 (head
+`6fceb71365803ced6bee5f2a0972df05358f7075`) to the pinned preview runtime.
+The fused-indexer test is vendored from that revision; source SPDX notices are
+preserved. vLLM source and tests use Apache-2.0 (included in `licenses/`).
+The backport retains this build's combined scorer, SM120 deterministic top-k
+and cache layout; GB300-specific tuning and newer-runner changes are not copied.

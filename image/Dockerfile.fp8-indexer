@@ -1,0 +1,12 @@
+# Isolated #54890 backport onto the exact qualified v1.0.0 image.
+ARG BASE=technigmaai/qwen3.8-flash-next-int4-rtxpro6000-tp1@sha256:2da71c1a8d47c2869bea794e67c2ee8b8026d2f029677561d735dcf192047791
+FROM ${BASE}
+LABEL org.opencontainers.image.version="1.0.1-rc.1" \
+      rtx.indexer.fix="vllm-project/vllm#54890 (6fceb71365803ced6bee5f2a0972df05358f7075), adapted to 8e685d198" \
+      rtx.indexer.dtype="bf16 default; fp8 opt-in via attention_config.indexer_kv_dtype" \
+      org.opencontainers.image.source="https://github.com/technigmaai/qwen3.8-flash-next-int4-rtxpro6000-tp1"
+COPY image/fp8-indexer.patch /opt/llm/fp8-indexer.patch
+COPY tests/fp8_indexer /opt/llm/tests/fp8_indexer
+RUN patch --batch --fuzz=0 -p1 -d /usr/local/lib/python3.12/dist-packages < /opt/llm/fp8-indexer.patch \
+ && python3 -m compileall -q /usr/local/lib/python3.12/dist-packages/vllm/models/qwen3_8_flash_next \
+ && python3 /opt/llm/tests/fp8_indexer/test_static.py

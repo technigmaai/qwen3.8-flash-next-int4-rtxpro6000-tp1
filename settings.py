@@ -37,6 +37,9 @@ def load(path=None):
     missing = set(required) - values.keys()
     if missing:
         raise ValueError(f'Missing settings: {sorted(missing)}')
+    values.setdefault('INDEXER_KV_DTYPE', 'bf16')
+    if values['INDEXER_KV_DTYPE'] not in ('bf16', 'fp8'):
+        raise ValueError('INDEXER_KV_DTYPE must be bf16 or fp8.')
     for key in ['GPU_DEVICE','HOST_UID','HOST_GID','API_PORT','MAX_MODEL_LEN',
                 'MAX_NUM_SEQS','MAX_NUM_BATCHED_TOKENS','KV_CACHE_MEMORY_BYTES','MTP_TOKENS']:
         if not values[key].isdigit():

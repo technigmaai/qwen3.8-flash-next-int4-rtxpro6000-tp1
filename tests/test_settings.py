@@ -20,6 +20,15 @@ class SettingsTest(unittest.TestCase):
         self.assertEqual(c['MAX_MODEL_LEN'],'524288')
         self.assertEqual(c['MAX_NUM_SEQS'],'8')
         self.assertEqual(c['MTP_TOKENS'],'3')
+        self.assertEqual(c['INDEXER_KV_DTYPE'], 'bf16')
+
+    def test_fp8_indexer_setting(self):
+        c = load(self.fixture({'INDEXER_KV_DTYPE=bf16': 'INDEXER_KV_DTYPE=fp8'}))
+        self.assertEqual(c['INDEXER_KV_DTYPE'], 'fp8')
+
+    def test_unsupported_indexer_setting(self):
+        with self.assertRaises(ValueError):
+            load(self.fixture({'INDEXER_KV_DTYPE=bf16': 'INDEXER_KV_DTYPE=mxfp4'}))
 
     def test_shell_expansion_rejected(self):
         with self.assertRaises(ValueError):

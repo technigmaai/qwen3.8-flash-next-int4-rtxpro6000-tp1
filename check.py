@@ -36,6 +36,8 @@ def main():
     assert image['Architecture'] == 'amd64' and image['Os'] == 'linux'
     labels = image['Config'].get('Labels',{})
     assert '52830' in labels.get('rtx.parser.fix','') and '52805' in labels.get('rtx.xgrammar.fix','')
+    if c['INDEXER_KV_DTYPE'] == 'fp8':
+        assert '54890' in labels.get('rtx.indexer.fix', ''), 'FP8 indexer requested but image lacks the backport label'
     assert (runtime/'draft-scale/image_id').read_text().strip() == image['Id'], 'Regenerate scale module for this image'
     assert (runtime/'draft-scale/module_path').read_text().strip() == '/usr/local/lib/python3.12/dist-packages/vllm/models/qwen3_8_flash_next/nvidia/mtp.py'
     assert 'scale=_draft_scale' in (runtime/'draft-scale/mtp.py').read_text()
