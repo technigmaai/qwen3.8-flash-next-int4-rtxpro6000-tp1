@@ -1,0 +1,10 @@
+.git
+.env
+.hf-download
+runtime
+logs
+data
+runs
+__pycache__
+*.pyc
+.DS_Store

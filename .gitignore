@@ -1,0 +1,11 @@
+.env
+.hf-download/
+runtime/
+logs/
+data/
+runs/
+__pycache__/
+*.pyc
+*.log
+*.orig
+.DS_Store

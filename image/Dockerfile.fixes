@@ -1,0 +1,11 @@
+ARG BASE=technigmaai/qwen38-a5b-vllm:sm120-a5b-14642741
+FROM ${BASE}
+LABEL rtx.xgrammar.fix="vllm-project/vllm#52805 (12f64b3)" \
+      rtx.parser.fix="vllm-project/vllm#52830 (46638857fdbb30e0c232c9e8f9cb1ff6d6f545c3)" \
+      org.opencontainers.image.source="https://github.com/technigmaai/qwen3.8-flash-next-int4-rtxpro6000-tp1"
+COPY image/xgrammar-termination.patch image/parser-adapters.patch /opt/llm/
+COPY tests/test_xgrammar.py tests/test_parser_adapters.py /opt/llm/
+RUN patch --batch --fuzz=0 -p1 -d /usr/local/lib/python3.12/dist-packages < /opt/llm/xgrammar-termination.patch \
+ && patch --batch --fuzz=0 -p1 -d /usr/local/lib/python3.12/dist-packages < /opt/llm/parser-adapters.patch \
+ && python3 /opt/llm/test_xgrammar.py \
+ && python3 -c 'from vllm.parser import ParserManager; from vllm.parser.abstract_parser import DelegatingParser; assert issubclass(ParserManager.get_parser("qwen3_coder", "qwen3", True), DelegatingParser)'

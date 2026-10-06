@@ -1,0 +1,46 @@
+{
+  "validated_on": "2026-10-06",
+  "hardware": "One Linux AMD64 NVIDIA RTX PRO 6000 Blackwell 96 GB; TP1",
+  "driver": "595.84",
+  "runtime": {"vllm": "0.1.dev20073+g8e685d198", "torch": "2.13.0+cu130", "cuda": "13.0"},
+  "model": "azampatti/Qwen3.8-Flash-Next-125B-A5B-INT4-AutoRound",
+  "model_revision": "1464274120d36a4d8fcaa934552334a7d83ce0fd",
+  "settings": {
+    "max_model_len": 524288, "yarn_factor": 2.0, "max_num_seqs": 8,
+    "max_num_batched_tokens": 8192, "kv_cache_memory_bytes": 13000000000,
+    "kv_cache_dtype": "fp8_e4m3", "kv_capacity_tokens": 813354,
+    "max_context_concurrency": 1.55, "mtp_tokens": 3, "draft_top_k": 10,
+    "draft_shared_expert_width": 640, "draft_logit_scale": 2,
+    "draft_sample_method": "greedy", "rejection_sample_method": "block", "api_port": 8000,
+    "model_aliases": ["azampatti/Qwen3.8-Flash-Next-125B-A5B-INT4-AutoRound", "rtx"]
+  },
+  "final_runtime": {
+    "tool_choice_adversarial_probes_passed": 13,
+    "TC-45": {"score": 2, "maximum": 2, "server_excluded": false, "seed": 42},
+    "api_suite": "passed: chat, reasoning, auto tools, JSON, escaped/newline named tools, arithmetic/shared prefix",
+    "concurrent_streams": {"completed": 8, "peak_running": 8, "output_tokens_each": 512, "elapsed_seconds_range": [5.72, 6.10]},
+    "mixed_structured_streams": {"json": 16, "named_tools": 16, "all_finished_and_DONE": true},
+    "observed_CUDA_OOM_assertion_grammar_termination_failure": false,
+    "named_tool_finish_reason_caveat": "Pinned runtime reports stop for valid named calls; required calls report tool_calls."
+  },
+  "prior_image_same_serving_profile": {
+    "difference": "Before parser-only PR 52830; already included PR 52805",
+    "synthetic_retrieval": {"prompt_tokens": 522992, "output_tokens": 11, "seconds": 80.72, "passed": true},
+    "eight_worker_arithmetic_soak": {"seconds": 60.14, "correct_responses": 1904, "failed_requests": 0},
+    "repeated_on_final_parser_patched_runtime": false
+  },
+  "portable_package_checks": {
+    "host_settings_unit_tests_passed": 5,
+    "python_and_shell_syntax": "passed",
+    "compose_model_mounts_draft_template_and_image_checks": "passed",
+    "configuration_only_container": "passed; both target/draft YaRN, 512k, MTP3, slots8, batch8192, 13GB FP8 and aliases",
+    "loaded_model_weights_or_bound_api_port": false,
+    "live_service_modified_during_publication": false
+  },
+  "limitations": [
+    "Eight request slots share one KV pool, not eight full-512k contexts.",
+    "Native context is 262144; 524288 uses YaRN extension, not exhaustive long-context quality qualification.",
+    "No image/video workload qualification, maximum-safe-KV search or multi-day stability qualification.",
+    "Recorded live results use the original operational launcher. Portable packaging does not by itself imply a fresh full model boot."
+  ]
+}

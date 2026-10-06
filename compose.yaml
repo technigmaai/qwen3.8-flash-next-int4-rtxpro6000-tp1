@@ -1,0 +1,79 @@
+services:
+  model:
+    image: ${IMAGE:?Set IMAGE in .env}
+    container_name: ${CONTAINER_NAME:-qwen38-rtxpro6000}
+    restart: unless-stopped
+    user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
+    shm_size: 16g
+    ports:
+      - "${API_PORT:-8000}:8000"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ["${GPU_DEVICE:-0}"]
+              capabilities: [gpu]
+    entrypoint: ["/bin/bash", "/deployment/entrypoint.sh"]
+    volumes:
+      - type: bind
+        source: ${MODEL_HOST_DIR:?Set MODEL_HOST_DIR}
+        target: /models/qwen
+        read_only: true
+        bind: {create_host_path: false}
+      - type: bind
+        source: ${RUNTIME_HOST_DIR:?Set RUNTIME_HOST_DIR}
+        target: /runtime
+        bind: {create_host_path: false}
+      - type: bind
+        source: ./entrypoint.sh
+        target: /deployment/entrypoint.sh
+        read_only: true
+      - type: bind
+        source: ./templates/chat_template.jinja
+        target: /deployment/chat_template.jinja
+        read_only: true
+      - type: bind
+        source: ${RUNTIME_HOST_DIR}/draft-scale/mtp.py
+        target: /usr/local/lib/python3.12/dist-packages/vllm/models/qwen3_8_flash_next/nvidia/mtp.py
+        read_only: true
+        bind: {create_host_path: false}
+    environment:
+      HOME: /tmp
+      HF_HUB_OFFLINE: "1"
+      TRANSFORMERS_OFFLINE: "1"
+      HF_HUB_DISABLE_SHARED_BLOBS: "1"
+      HF_HUB_DISABLE_XET: "1"
+      HF_HOME: /runtime/hf
+      XDG_CACHE_HOME: /runtime/cache
+      VLLM_CACHE_ROOT: /runtime/vllm
+      FLASHINFER_WORKSPACE_BASE: /runtime/flashinfer
+      VLLM_ALLOW_LONG_MAX_MODEL_LEN: "1"
+      TORCH_CUDA_ARCH_LIST: 12.0a
+      FLASHINFER_CUDA_ARCH_LIST: 12.0a
+      MAX_JOBS: "2"
+      VLLM_PLE_MMAP: "1"
+      VLLM_PLE_MMAP_WORKERS: "8"
+      VLLM_PLE_MMAP_PREWARM: "0"
+      VLLM_PLE_MMAP_MADV_RANDOM: "1"
+      VLLM_FP8_HYBRID: "1"
+      VLLM_MARLIN_USE_ATOMIC_ADD: "1"
+      VLLM_USE_DEEP_GEMM: "0"
+      VLLM_USE_FLASHINFER_SAMPLER: "1"
+      VLLM_QSA_DET_TOPK: "1"
+      VLLM_QSA_DET_LIB: /opt/llm/kernel-det/_C_det.so
+      VLLM_MTP_DRAFT_SCALE: ${DRAFT_LOGIT_SCALE:-2}
+      MODEL_REVISION: ${MODEL_REVISION}
+      MODEL_ALIASES: ${MODEL_ALIASES}
+      MAX_MODEL_LEN: ${MAX_MODEL_LEN:-524288}
+      MAX_NUM_SEQS: ${MAX_NUM_SEQS:-8}
+      MAX_NUM_BATCHED_TOKENS: ${MAX_NUM_BATCHED_TOKENS:-8192}
+      KV_CACHE_MEMORY_BYTES: ${KV_CACHE_MEMORY_BYTES:-13000000000}
+      KV_CACHE_DTYPE: ${KV_CACHE_DTYPE:-fp8_e4m3}
+      MTP_TOKENS: ${MTP_TOKENS:-3}
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health',timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      start_period: 300s
+      retries: 3
