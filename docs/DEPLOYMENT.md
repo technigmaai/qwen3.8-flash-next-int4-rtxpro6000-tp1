@@ -62,6 +62,14 @@ and `HOST_GID` with your own numeric IDs. Select GPU and API port as needed.
 `.env` contains literal values: no shell variables, substitutions or `~`.
 The helpers do not evaluate shell code. Do not publish the private `.env`.
 
+The stable example selects v1.0.0, a decimal 13 GB main FP8 KV budget and a
+BF16 indexer. The separately tested FP8 release candidate uses a **decimal
+15 GB** budget: set `KV_CACHE_MEMORY_BYTES=15000000000` and
+`INDEXER_KV_DTYPE=fp8` with the candidate image. See
+[the exact candidate profile](../README.md#tested-fp8-release-candidate-profile--15-gb-kv)
+and [its qualification results](FP8-INDEXER-RC1.md). Image publication does not
+automatically change `.env` or reserve GPU memory; the launch settings do.
+
 Pull the release image, then run `./service.sh prepare`. It creates:
 
 - An independent draft `config.json` with top-k 10, the MTP head's own shared
@@ -109,7 +117,8 @@ This recipe does not add API authentication.
 - **Permission denied:** runtime must be writable by configured UID/GID;
   original model files and snapshot symlink targets must be readable.
 - **Image-specific scale mismatch:** pull the intended image and rerun prepare.
-- **OOM:** the 13 GB KV pool is explicit and ignores auto memory sizing. Keep
+- **OOM:** the KV pool (13 GB stable / 15 GB tested RC) is explicit and ignores
+  auto memory sizing. Keep
   headroom for activation/workspace growth, long prefills and other processes.
   Do not infer a larger safe cache just from idle free VRAM.
 - **TC-45 excluded:** confirm the published parser-patched image/labels, then
